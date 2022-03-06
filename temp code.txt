@@ -1,0 +1,46 @@
+library ieee; 
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+use ieee.numeric_std.all;
+entity semifinal is
+port ( inner, outter,start : in std_logic ;
+	buzzer : out std_logic;
+	bcd : buffer std_logic_vector (3 downto 0));
+end semifinal;
+
+architecture arch of semifinal is 
+signal flag: std_logic ;
+--signal count : std_logic_vector (3 downto 0);
+begin 
+
+process (inner, outter, start)
+begin
+if (start'event and start ='1') then 
+bcd <= "0000";
+flag <= '0';
+end if ;
+if outter = '1' then 
+ if flag ='0' then 
+  flag <= '1';
+ else
+  --bcd <= bcd -"0001";
+  flag <= '0';
+ end if; 
+end if;
+
+if inner = '1' then 
+ if flag ='0' then 
+  flag <= '1';
+ else
+  --bcd <= bcd +"0001";
+  flag <= '0';
+ end if; 
+end if;
+if bcd >= 5 then 
+buzzer <= '1';
+else buzzer <= '0';
+end if;
+
+end process;
+--bcd <= count;
+end arch;
